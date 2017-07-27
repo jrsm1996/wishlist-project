@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Wishlist Dashboard</title>
+    </head>
+    <body>
+        <h1>Hello, {{ current_user.name }}!</h1>
+        <button><a href="/logout">Log Out</a></button>
+        <h3>Your Wish List</h3>
+        {% if wishlist %}
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Added By</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
+                </tr>
+                {% for item in wishlist %}
+                    <tr>
+                        <td><a href="/wish_items/{{ item.id }}">{{ item.name }}</a></td>
+                        <td>{{ item.creator.name }}</td>
+                        <td>{{ item.created_at }}</td>
+                        <td>
+                            {% if item.creator == current_user %}
+                                <a href="/wish_items/delete/{{ item.id }}">Delete</a>
+                            {% else %}
+                                <a href="/wish_items/remove/{{ item.id }}">Remove from my Wishlist</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>You have no wishlist.</p>
+        {% endif %}
+        <br>
+        <h3>Other Users' Wish List</h3>
+        {% if other_items %}
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Added By</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
+                </tr>
+                {% for item in other_items %}
+                    <tr>
+                        <td><a href="/wish_items/{{ item.id }}">{{ item.name }}</a></td>
+                        <td>{{ item.creator.name }}</td>
+                        <td>{{ item.created_at }}</td>
+                        <td><a href="/wish_items/add/{{ item.id }}">Add to my Wishlist</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>There are no other wishlist items.</p>
+        {% endif %}
+        <br>
+        <button><a href="/wish_items/create">Add Item</a></button>
+    </body>
+</html>
